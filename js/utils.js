@@ -37,14 +37,16 @@ function calcPoints(correct, wrong) {
   return Math.max(0, correct * 2 - wrong * 0.66);
 }
 
+/* Returns a CSS utility class for coloured text based on percentage */
 function pctColor(pct) {
-  if (pct >= 70) return 'text-green-400';
-  if (pct >= 45) return 'text-yellow-400';
-  return 'text-red-400';
+  if (pct >= 70) return 'text-green';
+  if (pct >= 45) return 'text-amber';
+  return 'text-red';
 }
 
-function barColor(pct) {
-  if (pct >= 70) return 'bar-green';
-  if (pct >= 45) return 'bar-yellow';
-  return 'bar-red';
+/* Returns progress-fill colour class */
+function fillColor(pct) {
+  if (pct >= 70) return 'fill-green';
+  if (pct >= 45) return 'fill-amber';
+  return 'fill-red';
 }

@@ -1,4 +1,4 @@
-/* ── landing.js: Home / Library page ── */
+/* ── landing.js ── */
 const Landing = (() => {
 
   function render() {
@@ -6,88 +6,94 @@ const Landing = (() => {
     const stats = DB.getTotalStats();
 
     document.getElementById('app').innerHTML = `
-    <div class="max-w-6xl mx-auto p-5">
 
-      <!-- Header -->
-      <div class="flex flex-wrap justify-between items-center gap-4 mb-7">
-        <div>
-          <h1 class="text-3xl font-bold text-blue-400">TSPSC Group 1 Test Prep</h1>
-          <p class="text-slate-400 text-sm mt-1">Practice tests · Analytics · Points tracking</p>
-        </div>
-        <div class="flex gap-3 items-center">
-          ${stats ? `
-            <div class="bg-slate-800 border border-slate-700 rounded-xl px-4 py-2 text-center">
-              <div class="text-yellow-400 font-bold text-xl">${stats.totalPoints.toFixed(1)}</div>
-              <div class="text-slate-400 text-xs">Total Points</div>
-            </div>
-            <div class="bg-slate-800 border border-slate-700 rounded-xl px-4 py-2 text-center">
-              <div class="text-blue-400 font-bold text-xl">${stats.totalTests}</div>
-              <div class="text-slate-400 text-xs">Tests Taken</div>
-            </div>
-          ` : ''}
-          <button onclick="Analytics.renderAll()" class="btn btn-slate">
-            📊 All Analytics
-          </button>
-        </div>
+    <!-- Nav -->
+    <nav class="top-nav">
+      <div class="nav-logo">TSPSC <span>Prep</span></div>
+      <div style="display:flex;align-items:center;gap:0.625rem;">
+        ${stats ? `
+          <div class="stat-pill">
+            <span class="stat-pill-val text-amber">${stats.totalPoints.toFixed(0)}</span>
+            <span class="stat-pill-lbl">Points</span>
+          </div>
+          <div class="stat-pill">
+            <span class="stat-pill-val text-blue">${stats.totalTests}</span>
+            <span class="stat-pill-lbl">Tests</span>
+          </div>
+        ` : ''}
+        <button onclick="Analytics.renderAll()" class="btn btn-ghost btn-sm">Analytics</button>
       </div>
+    </nav>
 
-      <!-- Create / Import -->
-      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5 mb-7">
-        <h2 class="text-lg font-bold mb-4">➕ Create / Import Test</h2>
-        <div class="grid md:grid-cols-3 gap-4 mb-4">
-          <div class="md:col-span-2">
-            <label class="text-slate-400 text-xs uppercase tracking-wider">Test Name</label>
-            <input id="testName" type="text" placeholder="e.g. TSPSC 2023 Paper 1"
-              class="w-full mt-1 p-2.5 rounded-lg bg-slate-900 border border-slate-700 text-white focus:outline-none focus:border-blue-500">
+    <!-- Page -->
+    <div class="page" style="padding-top:2rem;">
+
+      <!-- Create panel -->
+      <div class="card" style="margin-bottom:1.75rem;">
+        <p class="section-title" style="margin-bottom:0.5rem;">New Test</p>
+        <h2 class="card-title" style="margin-bottom:1.25rem;">Paste or import question JSON</h2>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.875rem;margin-bottom:0.875rem;">
+          <div style="grid-column:1/2">
+            <label class="field-label">Test name</label>
+            <input id="testName" class="input" type="text" placeholder="e.g. TSPSC 2023 Paper 1">
           </div>
           <div>
-            <label class="text-slate-400 text-xs uppercase tracking-wider">Minutes / Question</label>
-            <input id="mpq" type="number" value="1" min="0.5" step="0.5"
-              class="w-full mt-1 p-2.5 rounded-lg bg-slate-900 border border-slate-700 text-white focus:outline-none focus:border-blue-500">
+            <label class="field-label">Minutes per question</label>
+            <input id="mpq" class="input" type="number" value="1" min="0.5" step="0.5">
           </div>
         </div>
-        <label class="text-slate-400 text-xs uppercase tracking-wider">Paste Question JSON</label>
-        <textarea id="jsonInput" rows="6"
-          class="w-full mt-1 bg-slate-900 border border-slate-700 rounded-lg p-3 text-green-300 font-mono text-sm focus:outline-none focus:border-blue-500"
-          placeholder='[{"id":"q1","topic":"History","question":"Which year...\\n1. 2013\\n2. 2014","options":[{"key":"A","text":"2013"},{"key":"B","text":"2014"}],"correctAnswer":"B","explanation":"..."}]'></textarea>
-        <div class="flex flex-wrap gap-3 mt-4">
-          <button onclick="Landing.startDirect()" class="btn btn-blue">▶ Start Test</button>
-          <button onclick="Landing.saveToLibrary()" class="btn btn-green">💾 Save to Library</button>
-          <button onclick="Landing.importFile()" class="btn btn-slate">📂 Import JSON File</button>
+
+        <div style="margin-bottom:0.875rem;">
+          <label class="field-label">Question JSON</label>
+          <textarea id="jsonInput" class="textarea" rows="7"
+            placeholder='[{"id":"q1","topic":"History","question":"Which year?\\n1. 2013\\n2. 2014","options":[{"key":"A","text":"2013"},{"key":"B","text":"2014"}],"correctAnswer":"B","explanation":"..."}]'></textarea>
+        </div>
+
+        <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
+          <button onclick="Landing.startDirect()" class="btn btn-primary btn-md">Start Test</button>
+          <button onclick="Landing.importFile()" class="btn btn-ghost btn-md">Load from File</button>
         </div>
       </div>
 
-      <!-- Test Library -->
-      <div>
-        <h2 class="text-lg font-bold mb-4">📚 Test Library (${tests.length})</h2>
-        ${tests.length === 0 ? `
-          <div class="text-center py-12 text-slate-500 bg-slate-800 rounded-xl border border-slate-700">
-            <div class="text-4xl mb-3">📭</div>
-            <p>No saved tests yet.</p>
-            <p class="text-sm mt-1">Paste JSON above and click <span class="text-blue-400">Save to Library</span>.</p>
-          </div>
-        ` : `<div class="space-y-4">${tests.map(t => testCard(t)).join('')}</div>`}
+      <!-- Library -->
+      <div style="margin-bottom:1.25rem;display:flex;align-items:center;justify-content:space-between;">
+        <p class="section-title">Library &nbsp;<span style="color:var(--t3);font-weight:400;text-transform:none;letter-spacing:0;">${tests.length} test${tests.length !== 1 ? 's' : ''}</span></p>
       </div>
+
+      ${tests.length === 0 ? `
+        <div class="card" style="text-align:center;padding:3rem 1.5rem;color:var(--t3);">
+          <div style="font-size:2rem;margin-bottom:0.75rem;opacity:0.4;">☐</div>
+          <p style="font-size:0.875rem;">No saved tests yet.</p>
+          <p style="font-size:0.8125rem;margin-top:0.25rem;">Paste a JSON array above and click <strong style="color:var(--t2);">Save to Library</strong>.</p>
+        </div>
+      ` : `
+        <div style="display:flex;flex-direction:column;gap:0.75rem;">
+          ${tests.map(t => testCard(t)).join('')}
+        </div>
+      `}
 
       <!-- Schema reference -->
-      <details class="mt-7 bg-slate-800 border border-slate-700 rounded-xl p-5">
-        <summary class="font-semibold text-slate-300 flex justify-between">
-          📄 Expected JSON Schema <span class="arr text-slate-500 text-sm"></span>
+      <details class="card" style="margin-top:1.75rem;">
+        <summary style="display:flex;align-items:center;justify-content:space-between;">
+          <span class="card-title">JSON Schema Reference</span>
+          <span class="chevron text-muted" style="font-size:0.75rem;"></span>
         </summary>
-        <pre class="mt-4 text-xs text-green-300 overflow-auto leading-relaxed">
-[
+        <hr class="divider" style="margin:1rem 0;">
+        <p class="caption" style="margin-bottom:0.625rem;">Each question object must match this structure. Use <code style="font-family:monospace;color:#6ee7b7;">\\n</code> inside strings for line breaks in numbered lists.</p>
+        <pre style="font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:#6ee7b7;overflow:auto;line-height:1.7;background:var(--bg);border:1px solid var(--border);border-radius:var(--r);padding:1rem;">[
   {
     "id": "q1",
     "topic": "Telangana History",
-    "question": "Which of the following are correct?\\n1. Telangana formed in 2014\\n2. Capital is Hyderabad\\n3. It is the 30th state",
+    "question": "Which are correct?\\n1. Formed in 2014\\n2. Capital is Hyderabad",
     "options": [
-      {"key": "A", "text": "1 and 2 only"},
-      {"key": "B", "text": "1 and 3 only"},
-      {"key": "C", "text": "2 and 3 only"},
-      {"key": "D", "text": "All of the above"}
+      { "key": "A", "text": "1 only" },
+      { "key": "B", "text": "2 only" },
+      { "key": "C", "text": "Both" },
+      { "key": "D", "text": "Neither" }
     ],
-    "correctAnswer": "A",
-    "explanation": "Telangana (29th state) formed on 2 June 2014. Hyderabad is the capital. Statement 3 is wrong."
+    "correctAnswer": "C",
+    "explanation": "Both statements are correct."
   }
 ]</pre>
       </details>
@@ -98,42 +104,42 @@ const Landing = (() => {
   function testCard(t) {
     const results = DB.getResultsByTest(t.id);
     const last    = results[results.length - 1];
-    const best    = results.reduce((b,r) => (!b || r.accuracy > b.accuracy) ? r : b, null);
-    const topics  = (t.topics || []).slice(0,4).map(tp => `<span class="topic-tag">${escHtml(tp)}</span>`).join(' ');
+    const best    = results.reduce((b, r) => (!b || r.accuracy > b.accuracy) ? r : b, null);
+    const topics  = (t.topics || []).slice(0, 5).map(tp =>
+      `<span class="tag">${escHtml(tp)}</span>`
+    ).join('');
 
     return `
-    <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
-      <div class="flex flex-wrap justify-between items-start gap-3">
-        <div class="flex-1 min-w-0">
-          <div class="font-bold text-lg truncate">${escHtml(t.name)}</div>
-          <div class="text-slate-400 text-sm mt-1">${t.questions.length} questions &nbsp;·&nbsp; ${formatDate(t.createdAt)}</div>
-          <div class="flex flex-wrap gap-1.5 mt-2">${topics}</div>
+    <div class="card" style="padding:1.125rem;">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;flex-wrap:wrap;">
+        <div style="flex:1;min-width:0;">
+          <div class="card-title" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escHtml(t.name)}</div>
+          <div class="caption" style="margin-top:0.25rem;">${t.questions.length} questions &nbsp;·&nbsp; Added ${formatDate(t.createdAt)}</div>
+          ${topics ? `<div style="display:flex;flex-wrap:wrap;gap:0.375rem;margin-top:0.625rem;">${topics}</div>` : ''}
         </div>
-        <div class="flex gap-2 text-sm flex-shrink-0">
-          ${last  ? `<div class="bg-slate-700 px-3 py-1 rounded-full">Last: <span class="${pctColor(last.accuracy)}">${last.accuracy.toFixed(1)}%</span></div>` : ''}
-          ${best && results.length > 1 ? `<div class="bg-slate-700 px-3 py-1 rounded-full">Best: <span class="text-yellow-400">${best.accuracy.toFixed(1)}%</span></div>` : ''}
-          ${results.length > 0 ? `<div class="bg-slate-700 px-3 py-1 rounded-full">Attempts: <span class="text-blue-400">${results.length}</span></div>` : ''}
+        <div style="display:flex;gap:0.5rem;align-items:center;flex-wrap:wrap;flex-shrink:0;">
+          ${last  ? `<span style="font-size:0.75rem;background:var(--surface-2);border:1px solid var(--border);border-radius:var(--r-sm);padding:0.2rem 0.6rem;">Last: <span class="${pctColor(last.accuracy)}">${last.accuracy.toFixed(1)}%</span></span>` : ''}
+          ${best && results.length > 1 ? `<span style="font-size:0.75rem;background:var(--surface-2);border:1px solid var(--border);border-radius:var(--r-sm);padding:0.2rem 0.6rem;">Best: <span class="text-amber">${best.accuracy.toFixed(1)}%</span></span>` : ''}
+          ${results.length > 0 ? `<span style="font-size:0.75rem;color:var(--t3);">${results.length} attempt${results.length !== 1 ? 's' : ''}</span>` : ''}
         </div>
       </div>
-      <div class="flex flex-wrap gap-2 mt-4">
-        <button onclick="Landing.loadAndStart('${t.id}')" class="btn btn-blue text-sm">▶ Start Test</button>
-        ${results.length > 0 ? `
-          <button onclick="Analytics.renderResults(null,'${t.id}')" class="btn btn-slate text-sm">📊 Analytics</button>
-        ` : ''}
-        <button onclick="DB.exportTest('${t.id}')" class="btn btn-slate text-sm">⬇ Export JSON</button>
-        <button onclick="Landing.del('${t.id}')" class="btn btn-red text-sm">🗑 Delete</button>
+      <div style="display:flex;gap:0.5rem;flex-wrap:wrap;margin-top:1rem;">
+        <button onclick="Landing.loadAndStart('${t.id}')" class="btn btn-primary btn-sm">Start</button>
+        ${results.length > 0 ? `<button onclick="Analytics.renderResults(null,'${t.id}')" class="btn btn-ghost btn-sm">Results</button>` : ''}
+        <button onclick="DB.exportTest('${t.id}')" class="btn btn-ghost btn-sm">Export</button>
+        <button onclick="Landing.del('${t.id}')" class="btn btn-danger btn-sm" style="margin-left:auto;">Delete</button>
       </div>
     </div>`;
   }
 
   function parseJSON() {
     const raw = (document.getElementById('jsonInput').value || '').trim();
-    if (!raw) { alert('Please paste JSON first.'); return null; }
+    if (!raw) { alert('Please paste a JSON array first.'); return null; }
     try {
       const q = JSON.parse(raw);
-      if (!Array.isArray(q) || q.length === 0) { alert('JSON must be a non-empty array.'); return null; }
+      if (!Array.isArray(q) || !q.length) { alert('JSON must be a non-empty array.'); return null; }
       return q;
-    } catch(e) { alert('JSON parse error:\n' + e.message); return null; }
+    } catch (e) { alert('JSON parse error: ' + e.message); return null; }
   }
 
   function getMpq() {
@@ -141,35 +147,28 @@ const Landing = (() => {
   }
 
   function startDirect() {
-    const questions = parseJSON();
-    if (!questions) return;
-    TestUI.begin(questions, getMpq(), null);
-  }
-
-  function saveToLibrary() {
-    const questions = parseJSON();
-    if (!questions) return;
-    const name   = (document.getElementById('testName').value.trim()) || ('Test – ' + new Date().toLocaleDateString('en-IN'));
-    const topics = [...new Set(questions.map(q => q.topic).filter(Boolean))];
-    DB.saveTest({ id: genId(), name, questions, topics, createdAt: Date.now() });
-    alert(`"${name}" saved to library!`);
-    render();
+    const q = parseJSON();
+    if (!q) return;
+    const name   = document.getElementById('testName').value.trim() || ('Test — ' + new Date().toLocaleDateString('en-IN'));
+    const topics = [...new Set(q.map(x => x.topic).filter(Boolean))];
+    const test   = { id: genId(), name, questions: q, topics, createdAt: Date.now() };
+    DB.saveTest(test);
+    TestUI.begin(q, getMpq(), test.id);
   }
 
   function importFile() {
-    DB.importFromFile((questions, filename) => {
+    DB.importFromFile((q, filename) => {
       const name   = filename || 'Imported Test';
-      const topics = [...new Set(questions.map(q => q.topic).filter(Boolean))];
-      DB.saveTest({ id: genId(), name, questions, topics, createdAt: Date.now() });
-      alert(`"${name}" imported successfully!`);
-      render();
+      const topics = [...new Set(q.map(x => x.topic).filter(Boolean))];
+      const test   = { id: genId(), name, questions: q, topics, createdAt: Date.now() };
+      DB.saveTest(test);
+      TestUI.begin(q, 1, test.id);
     });
   }
 
   function loadAndStart(id) {
     const test = DB.getTest(id);
-    if (!test) return;
-    TestUI.begin(test.questions, 1, id);
+    if (test) TestUI.begin(test.questions, 1, id);
   }
 
   function del(id) {
