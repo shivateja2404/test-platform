@@ -177,5 +177,5 @@ const Landing = (() => {
     render();
   }
 
-  return { render, startDirect, saveToLibrary, importFile, loadAndStart, del };
+  return { render, startDirect, importFile, loadAndStart, del };
 })();
