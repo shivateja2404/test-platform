@@ -1,0 +1,146 @@
+/* ── Scrollbar ── */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-thumb { background: #475569; border-radius: 10px; }
+
+/* ── Question Options ── */
+.question-option {
+  background: #1e293b;
+  border: 2px solid #475569;
+  color: #f8fafc;
+  transition: all 0.18s ease;
+  cursor: pointer;
+  padding: 0.875rem 1rem;
+  border-radius: 0.75rem;
+  user-select: none;
+}
+.question-option:hover { background: #334155; border-color: #60a5fa; }
+.question-option.selected { background: #1d4ed8; border-color: #60a5fa; color: white; }
+.question-option.selected .option-key { background: #1e40af; color: white; }
+
+/* ── Question / Option Text ── */
+.question-text { line-height: 1.85; }
+.question-text br + br { display: block; content: ""; margin-top: 0.25rem; }
+
+/* ── Option Key Badge ── */
+.option-key {
+  background: #334155;
+  color: #94a3b8;
+  min-width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.8rem;
+  flex-shrink: 0;
+}
+
+/* ── Timer ── */
+.timer-box {
+  background: #1e3a5f;
+  border: 1px solid #2563eb;
+  color: #93c5fd;
+  padding: 0.35rem 0.9rem;
+  border-radius: 0.5rem;
+  font-weight: 700;
+  font-family: monospace;
+  font-size: 1.05rem;
+  letter-spacing: 0.05em;
+}
+.timer-warning {
+  background: #7f1d1d !important;
+  border-color: #ef4444 !important;
+  color: #fca5a5 !important;
+  animation: blink 1s infinite;
+}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.65} }
+
+/* ── Palette Buttons ── */
+.palette-btn {
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 0.5rem;
+  font-weight: 700;
+  color: white;
+  transition: transform 0.12s ease;
+  font-size: 0.78rem;
+  border: 2px solid transparent;
+}
+.palette-btn:hover { transform: scale(1.12); }
+.palette-btn.active-q { border-color: white !important; }
+.palette-legend {
+  width: 13px;
+  height: 13px;
+  border-radius: 3px;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+/* ── Generic Buttons ── */
+.btn {
+  padding: 0.5rem 1.2rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  transition: filter 0.15s;
+  cursor: pointer;
+}
+.btn:hover { filter: brightness(1.15); }
+.btn-blue   { background: #2563eb; color: white; }
+.btn-slate  { background: #334155; color: white; }
+.btn-red    { background: #dc2626; color: white; }
+.btn-purple { background: #7c3aed; color: white; }
+.btn-purple.marked { background: #a78bfa; color: #1e1b4b; }
+.btn-green  { background: #15803d; color: white; }
+.btn-yellow { background: #b45309; color: white; }
+
+/* ── Score Cards ── */
+.score-card {
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+  text-align: center;
+}
+.score-label {
+  color: #94a3b8;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  margin-bottom: 0.25rem;
+}
+.score-value { font-size: 2rem; font-weight: 800; }
+
+/* ── Progress Bar ── */
+.progress-track { background: #334155; border-radius: 9999px; overflow: hidden; }
+.progress-bar   { height: 10px; border-radius: 9999px; transition: width 0.5s ease; }
+.bar-green  { background: #22c55e; }
+.bar-yellow { background: #eab308; }
+.bar-red    { background: #ef4444; }
+
+/* ── Review item colours ── */
+.opt-correct { border: 1.5px solid #22c55e; background: rgba(34,197,94,0.12); color: #86efac; }
+.opt-wrong   { border: 1.5px solid #ef4444; background: rgba(239,68,68,0.12);  color: #fca5a5; }
+.opt-neutral { border: 1.5px solid #475569; color: #94a3b8; }
+
+/* ── Table ── */
+.data-table { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
+.data-table th { color: #94a3b8; border-bottom: 1px solid #334155; padding: 0.5rem 0.75rem; text-align: left; }
+.data-table td { padding: 0.5rem 0.75rem; border-bottom: 1px solid #1e293b; }
+.data-table tr:hover td { background: #1e293b; }
+
+/* ── Tag badge ── */
+.topic-tag {
+  background: #1e3a5f;
+  color: #93c5fd;
+  font-size: 0.7rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  font-weight: 600;
+}
+
+/* ── Collapsible arrow ── */
+details > summary { list-style: none; cursor: pointer; }
+details > summary::-webkit-details-marker { display: none; }
+details[open] .arr::after { content: "▲"; }
+details:not([open]) .arr::after { content: "▼"; }
